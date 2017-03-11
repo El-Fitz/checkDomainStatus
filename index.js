@@ -25,7 +25,9 @@ exports.handler = (event, context, callback) => {
 
 function checkAvailable(url, done) {
   //uses the core modules to run an IPv4 resolver that returns 'err' on error
-  dns.resolve4( url, done(err, addresses));
+  dns.resolve4(url, function(err, addresses) {
+      done(err, addresses);
+  });
 }
 
 function extractWebsiteDomain(website, done) {
