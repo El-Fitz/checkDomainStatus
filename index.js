@@ -28,10 +28,10 @@ exports.handler = (event, context, callback) => {
 
 function checkAvailable(url, done) {
   //uses the core modules to run an IPv4 resolver that returns 'err' on error
-  let rrtype = ['A', 'AAAA', 'CNAME'];
-  dns.resolve(url, rrtype, function(err, addresses) {
+  let rrtype = 'A', 'AAAA', 'CNAME';
+  dns.resolve(url, function(err, result) {
       console.log("Error: ", err);
-      console.log("Addresses: ", addresses);
+      console.log("Result: ", result);
       done(err, addresses);
   });
 }
