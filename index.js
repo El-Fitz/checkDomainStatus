@@ -28,7 +28,8 @@ exports.handler = (event, context, callback) => {
 
 function checkAvailable(url, done) {
   //uses the core modules to run an IPv4 resolver that returns 'err' on error
-  dns.resolve4(url, function(err, addresses) {
+  let rrtype = ['A', 'AAAA', 'CNAME'];
+  dns.resolve4(url, rrtype, function(err, addresses) {
       console.log("Error: ", err);
       console.log("Addresses: ", addresses);
       done(err, addresses);
