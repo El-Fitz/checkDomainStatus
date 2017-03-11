@@ -10,12 +10,12 @@ exports.handler = (event, context, callback) => {
   let website = event.company.website;
   extractWebsiteDomain(website, function(err, fullDomain) {
     if (typeof fullDomain !== null && fullDomain !== null) {
-      checkAvailable(fullDomain, function(err, addresses) {
-        if (err || addresses === null || typeof addresses == 'undefined' || addresses.length === 0) {
+      checkAvailable(fullDomain, function(err, result) {
+        if (err || result === null || typeof result == 'undefined' || result.length === 0) {
           console.log("URL didn't resolve");
           event.websiteDomainIsValid = false;
         } else {
-          event.domainARecords = addresses;
+          event.domainCheckResult = result;
           event.websiteDomainIsValid = true;
         }
         context.done(null, event);
@@ -28,11 +28,10 @@ exports.handler = (event, context, callback) => {
 
 function checkAvailable(url, done) {
   //uses the core modules to run an IPv4 resolver that returns 'err' on error
-  let rrtype = 'A', 'AAAA', 'CNAME';
-  dns.resolve(url, function(err, result) {
+  dns.resolve(url, "A", function(err, result) {
       console.log("Error: ", err);
-      console.log("Result: ", result);
-      done(err, addresses);
+      console.log("Results: ", result);
+      done(err, result);
   });
 }
 
