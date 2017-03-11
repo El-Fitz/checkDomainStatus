@@ -2,7 +2,7 @@
 var AWS = require('aws-sdk');
 AWS.config.region = 'eu-west-1';
 var lambda = new AWS.Lambda();
-var dns = require ( 'dns' )
+var dns = require ( 'dns' );
 
 console.log('Loading function');
 
@@ -10,7 +10,7 @@ exports.handler = (event, context, callback) => {
   let website = event.company.website;
   extractWebsiteDomain(website, function(err, fullDomain) {
     if (typeof fullDomain !== null && fullDomain !== null) {
-      checkAvailable(website, function(err, addresses) {
+      checkAvailable(fullDomain, function(err, addresses) {
         if (err || addresses === null || typeof addresses == 'undefined' || addresses.length === 0) {
           console.log("URL didn't resolve");
           event.websiteDomainIsValid = false;
@@ -29,6 +29,8 @@ exports.handler = (event, context, callback) => {
 function checkAvailable(url, done) {
   //uses the core modules to run an IPv4 resolver that returns 'err' on error
   dns.resolve4(url, function(err, addresses) {
+      console.log("Error: ", err);
+      console.log("Addresses: ", addresses);
       done(err, addresses);
   });
 }
